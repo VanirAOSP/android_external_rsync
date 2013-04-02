@@ -1144,7 +1144,7 @@ size_t strlcat(char *d, const char *s, size_t bufsize);
 extern int verbose;
 
 #ifndef HAVE_INET_NTOP
-const char *inet_ntop(int af, const void *src, char *dst, size_t size);
+const char *inet_rsync_ntop(int af, const void *src, char *dst, size_t size);
 #endif
 
 #ifndef HAVE_INET_PTON

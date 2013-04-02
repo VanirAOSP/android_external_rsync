@@ -26,11 +26,11 @@
  * sizeof(int) < 4.  sizeof(int) > 4 is fine; all the world's not a VAX.
  */
 
-static const char *inet_ntop4(const unsigned char *src, char *dst,
+static const char *inet_rsync_ntop4(const unsigned char *src, char *dst,
 			      size_t size);
 
 #ifdef AF_INET6
-static const char *inet_ntop6(const unsigned char *src, char *dst,
+static const char *inet_rsync_ntop6(const unsigned char *src, char *dst,
 			      size_t size);
 #endif
 
@@ -43,14 +43,14 @@ static const char *inet_ntop6(const unsigned char *src, char *dst,
  *	Paul Vixie, 1996.
  */
 const char *
-inet_ntop(int af, const void *src, char *dst, size_t size)
+inet_rsync_ntop(int af, const void *src, char *dst, size_t size)
 {
 	switch (af) {
 	case AF_INET:
-		return (inet_ntop4(src, dst, size));
+		return (inet_rsync_ntop4(src, dst, size));
 #ifdef AF_INET6
 	case AF_INET6:
-		return (inet_ntop6(src, dst, size));
+		return (inet_rsync_ntop6(src, dst, size));
 #endif
 	default:
 		errno = EAFNOSUPPORT;
@@ -60,7 +60,7 @@ inet_ntop(int af, const void *src, char *dst, size_t size)
 }
 
 /* const char *
- * inet_ntop4(src, dst, size)
+ * inet_rsync_ntop4(src, dst, size)
  *	format an IPv4 address
  * return:
  *	`dst' (as a const)
@@ -71,7 +71,7 @@ inet_ntop(int af, const void *src, char *dst, size_t size)
  *	Paul Vixie, 1996.
  */
 static const char *
-inet_ntop4(const unsigned char *src, char *dst, size_t size)
+inet_rsync_ntop4(const unsigned char *src, char *dst, size_t size)
 {
 	static const char *fmt = "%u.%u.%u.%u";
 	char tmp[sizeof "255.255.255.255"];
@@ -88,14 +88,14 @@ inet_ntop4(const unsigned char *src, char *dst, size_t size)
 }
 
 /* const char *
- * isc_inet_ntop6(src, dst, size)
+ * isc_inet_rsync_ntop6(src, dst, size)
  *	convert IPv6 binary address into presentation (printable) format
  * author:
  *	Paul Vixie, 1996.
  */
 #ifdef AF_INET6
 static const char *
-inet_ntop6(const unsigned char *src, char *dst, size_t size)
+inet_rsync_ntop6(const unsigned char *src, char *dst, size_t size)
 {
 	/*
 	 * Note that int32_t and int16_t need only be "at least" large enough
@@ -158,7 +158,7 @@ inet_ntop6(const unsigned char *src, char *dst, size_t size)
 		/* Is this address an encapsulated IPv4? */
 		if (i == 6 && best.base == 0 &&
 		    (best.len == 6 || (best.len == 5 && words[5] == 0xffff))) {
-			if (!inet_ntop4(src+12, tp, sizeof tmp - (tp - tmp)))
+			if (!inet_rsync_ntop4(src+12, tp, sizeof tmp - (tp - tmp)))
 				return (NULL);
 			tp += strlen(tp);
 			break;
